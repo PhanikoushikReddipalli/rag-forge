@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/app/AppShell";
 import { CHART_TOOLTIP, Metric, Panel, pct } from "@/components/app/Metric";
 import { Skeleton } from "@/components/ui/skeleton";
 import { average } from "@/lib/rag/evaluation";
-import { ScopeToggle, groupByDay, useAnalytics, useScope } from "./dashboard";
+import { ScopeToggle, groupByDay, useAnalytics, useScope } from "@/components/app/analytics-helpers";
 
 export const Route = createFileRoute("/_authenticated/analytics")({
   head: () => ({

@@ -48,7 +48,6 @@ function EvaluationPage() {
   const latestRunId = (results.data ?? [])[0]?.run_id as string | undefined;
   const latest = (results.data ?? []).filter((r: any) => r.run_id === latestRunId);
   const ok = latest.filter((r: any) => !r.error_message);
-  const qById = new Map((questions.data ?? []).map((q: any) => [q.id, q]));
 
   const runAll = async () => {
     const qs = questions.data ?? [];
@@ -154,6 +153,3 @@ function EvaluationPage() {
     </div>
   );
 }
-
-void qByIdUnused;
-function qByIdUnused() {}
