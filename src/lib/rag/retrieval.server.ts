@@ -113,8 +113,8 @@ export function fuseResults(
   for (const chunk of keyword) {
     const existing = merged.get(chunk.id);
     if (existing) {
-      existing.keyword_score = chunk.keyword_score;
-      existing.matched_terms = chunk.matched_terms;
+      if (chunk.keyword_score !== undefined) existing.keyword_score = chunk.keyword_score;
+      if (chunk.matched_terms) existing.matched_terms = chunk.matched_terms;
     } else {
       merged.set(chunk.id, { ...chunk });
     }

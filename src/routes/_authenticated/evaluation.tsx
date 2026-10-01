@@ -48,11 +48,10 @@ function EvaluationPage() {
   const latestRunId = (results.data ?? [])[0]?.run_id as string | undefined;
   const latest = (results.data ?? []).filter((r: any) => r.run_id === latestRunId);
   const ok = latest.filter((r: any) => !r.error_message);
-  const qById = new Map((questions.data ?? []).map((q: any) => [q.id, q]));
 
   const runAll = async () => {
     const qs = questions.data ?? [];
-    if (qs.length === 0) return toast.error("Add at least one evaluation question.");
+    if (qs.length === 0) { toast.error("Add at least one evaluation question."); return; }
     const runId = crypto.randomUUID();
     setProgress({ done: 0, total: qs.length });
     let failures = 0;
@@ -93,7 +92,7 @@ function EvaluationPage() {
           <div className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">No benchmark results yet. Metrics appear after you run the benchmark.</div>
         ) : (
           <>
-            <div className="text-label">latest run · {new Date(latest[0].created_at).toLocaleString()} · {ok.length} question(s)</div>
+            <div className="text-label">latest run · {new Date(latest[0]!.created_at).toLocaleString()} · {ok.length} question(s)</div>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 xl:grid-cols-8">
               <Metric label="hit rate" value={pct(average(ok.map((r: any) => (r.hit ? 1 : 0))))} />
               <Metric label="recall@5" value={pct(average(ok.map((r: any) => Number(r.recall_at_k))))} />
@@ -154,6 +153,3 @@ function EvaluationPage() {
     </div>
   );
 }
-
-void qByIdUnused;
-function qByIdUnused() {}

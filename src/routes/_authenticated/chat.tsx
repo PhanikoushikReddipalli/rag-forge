@@ -156,7 +156,7 @@ function ChatPage() {
       {/* Conversation history */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border lg:flex">
         <div className="p-3">
-          <Button variant="outline" className="w-full justify-start" onClick={() => navigate({ search: (p) => ({ source: p.source }) })}>
+          <Button variant="outline" className="w-full justify-start" onClick={() => navigate({ search: (p) => (p.source ? { source: p.source } : {}) })}>
             <MessageSquarePlus className="mr-2 h-4 w-4" /> New conversation
           </Button>
         </div>
@@ -171,7 +171,7 @@ function ChatPage() {
                 onClick={async () => {
                   await deleteFn({ data: { id: c.id } });
                   qc.invalidateQueries({ queryKey: ["conversations"] });
-                  if (search.c === c.id) navigate({ search: (p) => ({ source: p.source }) });
+                  if (search.c === c.id) navigate({ search: (p) => (p.source ? { source: p.source } : {}) });
                 }}
               ><Trash2 className="h-3.5 w-3.5" /></button>
             </div>
