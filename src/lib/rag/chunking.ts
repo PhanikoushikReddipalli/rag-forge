@@ -113,20 +113,18 @@ export function splitMarkdownIntoUnits(content: string): Unit[] {
 
   const flush = (endLine: number) => {
     const text = buffer.join("\n").trim();
-    if (text.length >= CHUNKING_DEFAULTS.minChars || (text && units.length === 0)) {
+    // A buffer holding only heading lines carries no content; the heading
+    // path is already preserved on the following section's metadata.
+    const onlyHeadings = text.split("\n").every((l) => !l.trim() || /^#{1,4}\s/.test(l));
+    if (text && !onlyHeadings) {
       units.push({
         content: text,
         chunk_type: text.startsWith("```") ? "code" : "section",
         line_start: bufferStart,
         line_end: endLine,
-        section: headingPath.join(" > ") || null,
+        section: headingPath.filter(Boolean).join(" > ") || null,
         page_number: null,
       });
-    } else if (text && units.length > 0) {
-      // Merge trivially small sections into the previous unit.
-      const prev = units[units.length - 1]!;
-      prev.content += `\n\n${text}`;
-      prev.line_end = endLine;
     }
     buffer = [];
     bufferStart = endLine + 1;

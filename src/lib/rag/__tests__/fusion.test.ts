@@ -35,10 +35,12 @@ describe("context builder", () => {
     const ctx = buildContext([
       chunk("a", { rerank_score: 0.9 }),
       chunk("a2", { rerank_score: 0.8, content: "content a" }),
+      chunk("b", { rerank_score: 0.7 }),
       chunk("low", { rerank_score: 0.01 }),
     ]);
     expect(ctx.citations.map((c) => c.index)).toEqual([1, 2]);
     expect(ctx.chunks.find((c) => c.id === "low")).toBeUndefined();
+    expect(ctx.chunks.find((c) => c.id === "a2")).toBeUndefined();
     expect(ctx.prompt).toContain("[1] a.py | lines 1-5");
   });
 });
