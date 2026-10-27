@@ -95,6 +95,9 @@ async function runIngestion(supabase: any, sourceId: string, files: RawFile[]) {
     .maybeSingle();
 
   const config = (source?.config ?? {}) as { chunk_size?: number; chunk_overlap?: number };
+  // Idempotent: clear leftovers from an interrupted earlier run so chunks are never duplicated.
+  const { error: wipeError } = await supabase.from("documents").delete().eq("source_id", sourceId);
+  if (wipeError) throw new Error(`Could not reset previous documents: ${wipeError.message}`);
   await supabase
     .from("knowledge_sources")
     .update({ status: "processing", stage: "chunking", progress: 35 })
